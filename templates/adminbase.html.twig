@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Admin</title>
+
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('admin') }}
+		{% endblock %}
+
+		{% block javascripts %}
+			{{ encore_entry_script_tags('admin') }}
+		{% endblock %}
+	</head>
+	<body>
+
+		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+			<a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="{{path('home')}}">Ecommerce backend</a>
+			<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<input class="form-control form-control-dark w-100" type="text" placeholder="Rechercher" aria-label="Search">
+			<div class="navbar-nav">
+				<div class="nav-item text-nowrap">
+					<a class="nav-link px-3" href="{{path('app_logout')}}">Deconnexion</a>
+				</div>
+			</div>
+		</header>
+
+		<div class="container-fluid">
+			<div class="row">
+				<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+					<div class="position-sticky pt-3">
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link active" aria-current="page" href="#">
+									<span data-feather="home"></span>
+									Categorie
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="{{path('category_index')}}">
+									<span data-feather="file"></span>
+									Liste des catégories
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="{{path('category_new')}}">
+									<span data-feather="shopping-cart"></span>
+									Ajouter une catégorie
+								</a>
+							</li>
+						</ul>
+
+						<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+							<span>Produits</span>
+							<a class="link-secondary" href="#">
+								<span data-feather="plus-circle"></span>
+							</a>
+						</h6>
+						<ul class="nav flex-column mb-2">
+							<li class="nav-item">
+								<a class="nav-link" href="{{path('product_index')}}">
+									<span data-feather="file-text"></span>
+									Liste des produits
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="{{path('product_new')}}">
+									<span data-feather="file-text"></span>
+									Ajouter un produit
+								</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+
+				<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4"> {% block body %}{% endblock %}
+					</main>
+				</div>
+			</div>
+
+		</body>
+	</html>
