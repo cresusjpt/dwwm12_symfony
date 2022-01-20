@@ -59,7 +59,6 @@ class Detail
     public function setDetailProduit(?Produit $detail_produit): self
     {
         $this->detail_produit = $detail_produit;
-
         return $this;
     }
 

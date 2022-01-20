@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProduitCrudController extends AbstractController
 {
     /**
-     * @Route("/", name="produit_crud_index", methods={"GET"})
+     * @Route("/", name="produit_index", methods={"GET"})
      */
     public function index(ProduitRepository $produitRepository): Response
     {
@@ -27,7 +27,7 @@ class ProduitCrudController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="produit_crud_new", methods={"GET", "POST"})
+     * @Route("/new", name="produit_new", methods={"GET", "POST"})
      */
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -36,10 +36,24 @@ class ProduitCrudController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // On récupère les images transmises
+            $images = $form->get('images')->getData();
+
+            // On boucle sur les images
+            foreach ($images as $image) {
+                // On génère un nouveau nom de fichier
+                $fichier = md5(uniqid()) . '.' . $image->guessExtension();
+                // On copie le fichier dans le dossier uploads
+                $image->move($this->getParameter('images_directory'), $fichier);
+
+                // On crée l'image dans la base de données
+                $produit->setImage($fichier);
+            }
+            
             $entityManager->persist($produit);
             $entityManager->flush();
 
-            return $this->redirectToRoute('produit_crud_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('produit_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('produit_crud/new.html.twig', [
@@ -49,7 +63,7 @@ class ProduitCrudController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="produit_crud_show", methods={"GET"})
+     * @Route("/{id}", name="produit_show", methods={"GET"})
      */
     public function show(Produit $produit): Response
     {
@@ -59,7 +73,7 @@ class ProduitCrudController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="produit_crud_edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="produit_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Produit $produit, EntityManagerInterface $entityManager): Response
     {
@@ -67,9 +81,21 @@ class ProduitCrudController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // On récupère les images transmises
+            $images = $form->get('images')->getData();
+
+            // On boucle sur les images
+            foreach ($images as $image) {
+                // On génère un nouveau nom de fichier
+                $fichier = md5(uniqid()) . '.' . $image->guessExtension();
+                // On copie le fichier dans le dossier uploads
+                $image->move($this->getParameter('images_directory'), $fichier);
+                // On crée l'image dans la base de données
+                $produit->setImage($fichier);
+            }
             $entityManager->flush();
 
-            return $this->redirectToRoute('produit_crud_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('produit_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('produit_crud/edit.html.twig', [
@@ -79,15 +105,15 @@ class ProduitCrudController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="produit_crud_delete", methods={"POST"})
+     * @Route("/{id}", name="produit_delete", methods={"POST"})
      */
     public function delete(Request $request, Produit $produit, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$produit->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $produit->getId(), $request->request->get('_token'))) {
             $entityManager->remove($produit);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('produit_crud_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('produit_index', [], Response::HTTP_SEE_OTHER);
     }
 }

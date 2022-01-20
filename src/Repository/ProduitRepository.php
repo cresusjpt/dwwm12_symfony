@@ -47,4 +47,22 @@ class ProduitRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /*find(entite, 2)
+    findAll()
+    findBy([
+        'id'=>'3',
+        'password'=>'gdfgdfgdfgfdgdfgdf'
+    ])
+
+    findByOne([
+        'email'=>'email@altrh.dev'
+    ])*/
+
+    public function recupererTout($pass): ?Produit{
+        return $this->createQueryBuilder('p')
+        ->where('password = :$pass')
+        ->getQuery()
+        ->getOneOrNullResult();
+    }
 }

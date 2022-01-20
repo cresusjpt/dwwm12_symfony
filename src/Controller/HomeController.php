@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Categorie;
 use App\Entity\User;
+use App\Repository\ProduitRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,13 +18,10 @@ class HomeController extends AbstractController
      * une annotation servant à définir les routes directement sur les fonctions
      * @Route("/", name="home")
      */
-    public function index(EntityManagerInterface $manager): Response
+    public function index(ProduitRepository $produitRepository): Response
     {
-        $manager->getRepository(User::class)->findAll();
-
-        dd($manager);
         return $this->render('home/index.html.twig', [
-            'users' => $manager
+            'produits' => $produitRepository->findAll()
         ]);
     }
 }

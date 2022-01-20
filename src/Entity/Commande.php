@@ -64,7 +64,6 @@ class Commande
     public function setCreatedAt(\DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
-
         return $this;
     }
 

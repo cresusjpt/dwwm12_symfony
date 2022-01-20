@@ -1,4 +1,13 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<p>{{ form_start(form) }}</p>
+<p>{{ form_widget(form.images) }}</p>
+<p>{{ form_widget(form.nom) }}</p>
+<p>{{ form_widget(form.description) }}</p>
+<p>{{ form_widget(form.taille) }}</p>
+<p>{{ form_label(form.color) }}{{ form_widget(form.color) }}</p>
+<p>{{ form_widget(form.qte_stock, {'type':'number', 'lang': app.request.locale}) }}</p>
+<p>{{ form_widget(form.prix, {'type':'number', 'lang': app.request.locale}) }}</p>
+<p>{{ form_widget(form.appartenir) }}</p>
+<p>
+	<button class="btn">{{ button_label|default('Enrégistrer') }}</button>
+</p>
 {{ form_end(form) }}

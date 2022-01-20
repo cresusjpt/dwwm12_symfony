@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'backendbase.html.twig' %}
 
-{% block title %}Categorie index{% endblock %}
+{% block title %}Liste des catégories{% endblock %}
 
 {% block body %}
-    <h1>Categorie index</h1>
+    <h1>Liste des catégories</h1>
 
     <table class="table">
         <thead>
@@ -21,8 +21,8 @@
                 <td>{{ categorie.name }}</td>
                 <td>{{ categorie.famille }}</td>
                 <td>
-                    <a href="{{ path('categorie_crud_show', {'id': categorie.id}) }}">show</a>
-                    <a href="{{ path('categorie_crud_edit', {'id': categorie.id}) }}">edit</a>
+                    <a href="{{ path('categorie_show', {'id': categorie.id}) }}">show</a>
+                    <a href="{{ path('categorie_edit', {'id': categorie.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +33,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('categorie_crud_new') }}">Create new</a>
+    <a href="{{ path('categorie_new') }}">Create new</a>
 {% endblock %}

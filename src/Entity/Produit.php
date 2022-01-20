@@ -34,6 +34,7 @@ class Produit
      */
     private $taille;
 
+    //Column(name="color",type="string", length=255)
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -131,7 +132,6 @@ class Produit
     public function setImage(?string $image): self
     {
         $this->image = $image;
-
         return $this;
     }
 

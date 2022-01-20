@@ -25,7 +25,7 @@ class RegistrationController extends AbstractController
     {
         $this->emailVerifier = $emailVerifier;
     }
-
+    
     /**
      * @Route("/register", name="app_register")
      */

@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Produit;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\ProduitRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,17 +20,51 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminController extends AbstractController
 {
     /**
-     * @Route("/", name="admin_index", methods={"GET"})
+     * @Route("/", name="user_index", methods={"GET"})
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository/*, EntityManagerInterface $manager*/): Response
     {
+
+        //les repository représentent la classe pour requeter les entités
+        //on peut y définit des méthodes pour faire des requetes personnalisées
+        //mais par défaut on a 4 fonctions qui permettent de recupérer nos données: find, findAll, findBy, findByOne 
+        //$products = $userRepository->recupererTout('');
+        //$us = $manager->getRepository(UserRepository::class)->find(User::class, 1);
+        //$this->getDoctrine()->getManager()->getRepository(UserRepository::class)->find(User::class,1);
+
+
         return $this->render('admin/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'utilisateurs' => $userRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/new", name="admin_new", methods={"GET", "POST"})
+     * 
+     * @Route("/role/{id}", name="roles_utilisateur")
+     */
+    public function editUser(User $user, Request $request, EntityManagerInterface $entityManager)
+    {
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid) {
+            $entityManager->persist($user);
+            $entityManager->flush();
+            //$this->addFlash('droit_edit', 'Utilisateur bien modifié');
+
+            return $this->redirectToRoute('user_index');
+        }
+
+
+
+        return $this->render('admin/new.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
+    }
+
+    /**
+     * @Route("/new", name="user_new", methods={"GET", "POST"})
      */
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -39,9 +76,9 @@ class AdminController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
         }
-        
+
         return $this->renderForm('admin/new.html.twig', [
             'user' => $user,
             'form' => $form,
@@ -49,7 +86,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_show", methods={"GET"})
+     * @Route("/{id}", name="user_show", methods={"GET"})
      */
     public function show(User $user): Response
     {
@@ -59,7 +96,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="admin_edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="user_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
@@ -69,7 +106,7 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('admin_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('admin/edit.html.twig', [
@@ -79,15 +116,15 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="admin_delete", methods={"POST"})
+     * @Route("/{id}", name="user_delete", methods={"POST"})
      */
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('admin_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -1,5 +1,12 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    globals:
+        imagepath: '%kernel.project_dir%/public/images/'
+    paths:
+        #'%kernel.project_dir%/vendor/acme/foo-bar/templates': foo_bar
+        '%kernel.project_dir%/public/images/': images
+    
+      
 
 when@test:
     twig:

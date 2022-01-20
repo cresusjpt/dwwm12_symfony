@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CategorieCrudController extends AbstractController
 {
     /**
-     * @Route("/", name="categorie_crud_index", methods={"GET"})
+     * @Route("/", name="categorie_index", methods={"GET"})
      */
     public function index(CategorieRepository $categorieRepository): Response
     {
@@ -27,7 +27,7 @@ class CategorieCrudController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="categorie_crud_new", methods={"GET", "POST"})
+     * @Route("/new", name="categorie_new", methods={"GET", "POST"})
      */
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -39,7 +39,7 @@ class CategorieCrudController extends AbstractController
             $entityManager->persist($categorie);
             $entityManager->flush();
 
-            return $this->redirectToRoute('categorie_crud_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('categorie_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('categorie_crud/new.html.twig', [
@@ -49,7 +49,7 @@ class CategorieCrudController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="categorie_crud_show", methods={"GET"})
+     * @Route("/{id}", name="categorie_show", methods={"GET"})
      */
     public function show(Categorie $categorie): Response
     {
@@ -59,7 +59,7 @@ class CategorieCrudController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="categorie_crud_edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="categorie_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Categorie $categorie, EntityManagerInterface $entityManager): Response
     {
@@ -69,7 +69,7 @@ class CategorieCrudController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('categorie_crud_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('categorie_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('categorie_crud/edit.html.twig', [
@@ -79,7 +79,7 @@ class CategorieCrudController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="categorie_crud_delete", methods={"POST"})
+     * @Route("/{id}", name="categorie_delete", methods={"POST"})
      */
     public function delete(Request $request, Categorie $categorie, EntityManagerInterface $entityManager): Response
     {
@@ -88,6 +88,6 @@ class CategorieCrudController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('categorie_crud_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('categorie_index', [], Response::HTTP_SEE_OTHER);
     }
 }
